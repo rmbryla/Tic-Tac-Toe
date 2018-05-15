@@ -156,7 +156,7 @@ def no_player(bot1, bot2):
 
 
 def no_player_no_draw(bot1 = bot, bot2 = dumb_bot, return_mode = 'winner'):
-    # made for the test file so it was faster and didnt spam the console
+    # made for the test file so it was faster and didn't spam the console
     turn = random.choice(['X', 'O'])
     win = False
     board = make_game_list()

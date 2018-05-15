@@ -1,6 +1,10 @@
 from Tic_Tac_Toe import *
 
 def test_one_player(repeat, bot1 = bot, bot2 = dumb_bot):
+    """
+    quickly see how many times one bot wins over a nother
+    by default bot1 is the smart one and bot2 only knows how to complete its two in a row for a win or block
+    """
     bot1_wins = 0 # bot1 is 'X'
     bot2_wins = 0 # bot2 is 'O'
     draw = 0

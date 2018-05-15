@@ -5,7 +5,7 @@ def HOME():
     return -300,300
 
 
-def make_dict():
+def make_dict():  # locations on the canvas of the different indexes
     dict = {}
     dict[7] = -300,300
     dict[8] = -100, 300
@@ -46,7 +46,7 @@ def draw_blank():
     turtle.right(90)
     turtle.up()
     turtle.goto(HOME())
-    turtle.speed(10)
+    turtle.speed(10) # change this to make the game faster or slower (0 fastest)
 
 
 def draw_x():
@@ -93,7 +93,7 @@ def draw_at(index, turn):
         draw_x()
 
 
-def main():
+def main():  # just for testing
     turtle.speed(0)
     draw_blank()
     turtle.speed(1)

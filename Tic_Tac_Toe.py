@@ -85,8 +85,8 @@ def two_player():
             turn = 'X'
 
 def one_player(bot):
-    #turn = random.choice(['X', 'O'])
-    turn = 'O'
+    turn = random.choice(['X', 'O'])
+    #turn = 'O' # if you make turn 'X' you will always go first, 'O' the bot will go first
     win = False
     print('You are X')
     if turn == 'X':

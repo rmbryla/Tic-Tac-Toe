@@ -9,22 +9,22 @@ def empty_board(board):
     return True
 
 
-def trapped(board):
-    if board[0][0] == board[2][2] and board[2][2] != board[1][1]:
-        return True
-    if board[0][2] == board[2][0] and board[0][2] != board[1][1]:
-        return True
+def trapped(board):                                               #   |    | X
+    if board[0][0] == board[2][2] and board[2][2] != board[1][1]: #-------------
+        return True                                               #   | O  |      checks if this is the case
+    if board[0][2] == board[2][0] and board[0][2] != board[1][1]: #-------------
+        return True                                               # X |    |
     return False
 
 
 def escape(board):
-    if board[0][0] == board[2][2] and board[2][2] != board[1][1]:
+    if board[0][0] == board[2][2] and board[2][2] != board[1][1]: # prevents x from winning in the case above
         return random.choice(intersection(valid_locations(board), [2,4,6,8]))
     if board[0][2] == board[2][0] and board[0][2] != board[1][1]:
         return random.choice(intersection(valid_locations(board), [2,4,6,8]))
     return random.choice(valid_locations(board))
 
-def valid_locations(board):
+def valid_locations(board): # return list of where you can play
     list = []
     for i in board:
         for j in i:
@@ -33,7 +33,7 @@ def valid_locations(board):
     return list
 
 
-def two_in_a_row(board):
+def two_in_a_row(board): # checks if there is an open two in a row on the board
     for i in board:
         if (i[0] == i[1] and type(i[2]) == int) or \
                 (i[1] == i[2] and type(i[0]) == int) or \
@@ -54,7 +54,7 @@ def two_in_a_row(board):
     return False
 
 
-def block(board, turn):
+def block(board, turn):  # checks if it can win first if there is two in a row if it cant win then it blocks
     for i in board: # two in a row
         if i[0] == i[1] and i[0] == turn:
             if type(i[2]) == int:
@@ -178,7 +178,18 @@ def block(board, turn):
     return random.choice(intersection(valid_locations(board), [1,3,7,9]))
 
 
-def play_adjacent(board):
+def two_sides(board): # checks if the opponent has two sides
+    if board[0][1] == board [1][0]: # that can cause you to lose if its played right
+        return True
+    if board[0][1] == board [1][2]:
+        return True
+    if board[1][0] == board [2][1]:
+        return True
+    if board[1][2] == board [2][1]:
+        return True
+
+
+def play_adjacent(board):  # plays next to the opponent if they have two sides next to eachother
     if type(board[0][1]) == str:
         return random.choice([9,7])
     if type(board[1][0]) == str:
@@ -190,28 +201,17 @@ def play_adjacent(board):
     return random.choice(intersection(valid_locations(board), [1,3,7,9]))
 
 
-def two_sides(board):
-    if board[0][1] == board [1][0]:
-        return True
-    if board[0][1] == board [1][2]:
-        return True
-    if board[1][0] == board [2][1]:
-        return True
-    if board[1][2] == board [2][1]:
-        return True
-
-
-def open_corners(board):
+def open_corners(board): # valid corner choices
     return intersection(valid_locations(board), [1,3,7,9])
 
 
-def intersection(lst1, lst2):
+def intersection(lst1, lst2): # intersection of two lists
     lst3 = [value for value in lst1 if value in lst2]
     lst3.sort()
     return lst3
 
 
-def turn_count(board, turn):
+def turn_count(board, turn): # how many times a given player has gone
     count = 0
     for i in board:
         for j in i:
@@ -220,7 +220,7 @@ def turn_count(board, turn):
     return count
 
 
-def corner_center(board, turn):
+def corner_center(board, turn): # returns true if you have the center and a single corner
     if turn_count(board, turn) > 2:
         return False
     if board[1][1] == turn:
@@ -235,7 +235,7 @@ def corner_center(board, turn):
     return False
 
 
-def best_corner(board):
+def best_corner(board): # returns the best corner to choose for best chance of winning
     if type(board[1][1]) == str:
         if board[0][0] == board[1][1]:
             if type(board[0][1]) == str:
@@ -277,15 +277,15 @@ def board_dict(board):
 
 
 
-def center(list, turn):
+def center(list, turn): # returns true if you have the center
     board = board_dict(list)
     if board['middle'] == turn:
         return True
     return False
 
 
-def trapped2(list, turn):
-    if turn == 'X':
+def trapped2(list, turn): # if you have only the center and the opponent has two
+    if turn == 'X':       # on a center and a corner opposite each other it can force a win for the opponent
         opp = 'O'
     else:
         opp = 'X'
@@ -313,7 +313,7 @@ def trapped2(list, turn):
 
 
 
-def escape2(list, turn):
+def escape2(list, turn):    # prevents the opponent from winning in the case described above
     if turn == 'X':
         opp = 'O'
     else:
@@ -340,7 +340,7 @@ def escape2(list, turn):
 
 
 
-def second_turn_check(list, turn):
+def second_turn_check(list, turn):  # returns true if you have the center and the opponent has the corner
     board = board_dict(list)
     if turn == 'X':
         opp = 'O'
@@ -355,8 +355,8 @@ def second_turn_check(list, turn):
 
 
 
-def second_turn_move(list, turn):
-    board = board_dict(list)
+def second_turn_move(list, turn): # plays in the opposite corner of the opponent if you have the center
+    board = board_dict(list)      # so that they may choose a side giving you a chance to win
     if turn == 'X':
         opp = 'O'
     else:
@@ -374,35 +374,34 @@ def second_turn_move(list, turn):
 
 def bot(board, turn):
 
-    if type(board[1][1]) == int:
+    if type(board[1][1]) == int: # tries to take the center first
         return 5
 
-    if two_in_a_row(board):
+    if two_in_a_row(board): # checks for win then block
         return block(board, turn)
 
-    if trapped(board):
+    if trapped(board): # first situation where it can be trapped
         return escape(board)
 
-    if trapped2(board, turn):
+    if trapped2(board, turn): # second situation where it can be trapped
         return escape2(board, turn)
 
+    # if all the corners are open and its not empty then it plays adjacent to the opponent to prevent you from
+    # getting trapped into a loss
     if intersection(valid_locations(board), [1,3,7,9]) == [1,3,7,9] and not empty_board(board):
         return play_adjacent(board)
 
-    if corner_center(board, turn):
+    if corner_center(board, turn): # tries to do the triangle strategy to trap the opponent
         return best_corner(board)
 
-    if not two_in_a_row(board):
-        if second_turn_check(board, turn):
+    if not two_in_a_row(board): # if nothing else works
+        if second_turn_check(board, turn): # cheking if it should play opposite on the second turn
             return second_turn_move(board, turn)
-        if intersection(valid_locations(board), [1,3,7,9]):
+        if intersection(valid_locations(board), [1,3,7,9]): # if there are open corners it plays in one randomly
             return random.choice(intersection(valid_locations(board), [1,3,7,9]))
         return random.choice(valid_locations(board))
 
-    if corner_center(board, turn):
-        return best_corner(board)
-
-    return random.choice(valid_locations(board))
+    return random.choice(valid_locations(board)) # catch in the event that nothing else worked (should never happen)
 
 
 def dumb_bot(board, turn):
